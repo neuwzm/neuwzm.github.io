@@ -32,7 +32,7 @@
 
 
 
-<meta property="og:updated_time" content="2017-12-10T18:23:52&#43;08:00"/>
+<meta property="og:updated_time" content="2017-12-15T16:59:40&#43;08:00"/>
 
 
 
@@ -141,15 +141,24 @@
       
       <div class="blah w-100">
         <h1 class="f3 fw1 athelas mt0 lh-title">
-          <a href="/posts/haha/welcome/" class="color-inherit dim link">
-            Welcome To Sledge&#39;s Home!
+          <a href="/posts/alluxio-%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3/" class="color-inherit dim link">
+            Alluxio 部署说明文档
             </a>
         </h1>
         <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          This is my frist post page .After that I will share some work summaries and technology articles which I hope will be useful for you. thx
-this is progarmmer sledge now working in TalkingData
+          先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+安装包下载 版本:1.5.0
+前期准备： master与worker机器间配互信（ssh免密登录）
+解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
+最终我们需要配置好的文件及内容示例如下：
+alluxio-env.sh: export ALLUXIO_HOME=${Alluxio_install_path} export ALLUXIO_MASTER_HOSTNAME=${Alluxio master hostname or ip} export ALLUXIO_UNDERFS_ADDRESS=${底层存储系统地址 hdfs、S3等都可以} export ALLUXIO_WORKER_MEMORY_SIZE=XGB export ALLUXIO_RAM_FOLDER=${Alluxio worker保存in-memory数据的目录} export ALLUXIO_JAVA_OPTS+=&rdquo; Java虚拟机配置选项&rdquo;
+alluxio-site.properties: alluxio.worker.tieredstore.reserver.enabled=true #是否启用层次化存储空间预留服务 alluxio.worker.tieredstore.levels=2 alluxio.worker.tieredstore.level0.alias=MEM alluxio.worker.tieredstore.level0.dirs.path=${Alluxio worker保存第一层级数据的目录} alluxio.worker.tieredstore.level0.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 在顶层存储层中的高水位比例，达到对应占用空间会进行数据淘汰 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 在顶层存储层中的低水位比例，数据淘汰后会降低到对应占用空间比例 alluxio.worker.tieredstore.level1.alias=HDD alluxio.worker.tieredstore.level1.dirs.path=${Alluxio worker保存第二层级数据的目录} alluxio.worker.tieredstore.level1.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 alluxio.security.authorization.permission.enabled=true 是否启用文件权限访问控制功能 alluxio.security.authentication.type=SIMPLE
+alluxio.security.authorization.permission.umask=027 创建文件和目录时的文件权限掩码 alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)
+master: ${master_hostname}
+worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
+若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS+=“fs.
         </div>
-          <a href="/posts/haha/welcome/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
+          <a href="/posts/alluxio-%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
         
       </div>
     </div>

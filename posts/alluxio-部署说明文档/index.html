@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>My New Hugo Site  | Alluxio 部署说明文档</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.31.1" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <link href='https://neuwzm.github.io/dist/main.css' rel='stylesheet' type="text/css" />
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Alluxio 部署说明文档" />
+<meta property="og:description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+安装包下载 版本:1.5.0
+前期准备： master与worker机器间配互信（ssh免密登录）
+解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
+最终我们需要配置好的文件及内容示例如下：
+alluxio-env.sh: export ALLUXIO_HOME=${Alluxio_install_path} export ALLUXIO_MASTER_HOSTNAME=${Alluxio master hostname or ip} export ALLUXIO_UNDERFS_ADDRESS=${底层存储系统地址 hdfs、S3等都可以} export ALLUXIO_WORKER_MEMORY_SIZE=XGB export ALLUXIO_RAM_FOLDER=${Alluxio worker保存in-memory数据的目录} export ALLUXIO_JAVA_OPTS&#43;=&rdquo; Java虚拟机配置选项&rdquo;
+alluxio-site.properties: alluxio.worker.tieredstore.reserver.enabled=true #是否启用层次化存储空间预留服务 alluxio.worker.tieredstore.levels=2 alluxio.worker.tieredstore.level0.alias=MEM alluxio.worker.tieredstore.level0.dirs.path=${Alluxio worker保存第一层级数据的目录} alluxio.worker.tieredstore.level0.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 在顶层存储层中的高水位比例，达到对应占用空间会进行数据淘汰 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 在顶层存储层中的低水位比例，数据淘汰后会降低到对应占用空间比例 alluxio.worker.tieredstore.level1.alias=HDD alluxio.worker.tieredstore.level1.dirs.path=${Alluxio worker保存第二层级数据的目录} alluxio.worker.tieredstore.level1.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 alluxio.security.authorization.permission.enabled=true 是否启用文件权限访问控制功能 alluxio.security.authentication.type=SIMPLE
+alluxio.security.authorization.permission.umask=027 创建文件和目录时的文件权限掩码 alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)
+master: ${master_hostname}
+worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
+若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS&#43;=“fs." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://neuwzm.github.io/posts/alluxio-%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3/" />
+
+
+
+<meta property="article:published_time" content="2017-12-15T16:59:40&#43;08:00"/>
+
+<meta property="article:modified_time" content="2017-12-15T16:59:40&#43;08:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Alluxio 部署说明文档">
+<meta itemprop="description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+安装包下载 版本:1.5.0
+前期准备： master与worker机器间配互信（ssh免密登录）
+解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
+最终我们需要配置好的文件及内容示例如下：
+alluxio-env.sh: export ALLUXIO_HOME=${Alluxio_install_path} export ALLUXIO_MASTER_HOSTNAME=${Alluxio master hostname or ip} export ALLUXIO_UNDERFS_ADDRESS=${底层存储系统地址 hdfs、S3等都可以} export ALLUXIO_WORKER_MEMORY_SIZE=XGB export ALLUXIO_RAM_FOLDER=${Alluxio worker保存in-memory数据的目录} export ALLUXIO_JAVA_OPTS&#43;=&rdquo; Java虚拟机配置选项&rdquo;
+alluxio-site.properties: alluxio.worker.tieredstore.reserver.enabled=true #是否启用层次化存储空间预留服务 alluxio.worker.tieredstore.levels=2 alluxio.worker.tieredstore.level0.alias=MEM alluxio.worker.tieredstore.level0.dirs.path=${Alluxio worker保存第一层级数据的目录} alluxio.worker.tieredstore.level0.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 在顶层存储层中的高水位比例，达到对应占用空间会进行数据淘汰 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 在顶层存储层中的低水位比例，数据淘汰后会降低到对应占用空间比例 alluxio.worker.tieredstore.level1.alias=HDD alluxio.worker.tieredstore.level1.dirs.path=${Alluxio worker保存第二层级数据的目录} alluxio.worker.tieredstore.level1.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 alluxio.security.authorization.permission.enabled=true 是否启用文件权限访问控制功能 alluxio.security.authentication.type=SIMPLE
+alluxio.security.authorization.permission.umask=027 创建文件和目录时的文件权限掩码 alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)
+master: ${master_hostname}
+worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
+若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS&#43;=“fs.">
+
+
+<meta itemprop="datePublished" content="2017-12-15T16:59:40&#43;08:00" />
+<meta itemprop="dateModified" content="2017-12-15T16:59:40&#43;08:00" />
+<meta itemprop="wordCount" content="119">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Alluxio 部署说明文档"/>
+<meta name="twitter:description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+安装包下载 版本:1.5.0
+前期准备： master与worker机器间配互信（ssh免密登录）
+解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
+最终我们需要配置好的文件及内容示例如下：
+alluxio-env.sh: export ALLUXIO_HOME=${Alluxio_install_path} export ALLUXIO_MASTER_HOSTNAME=${Alluxio master hostname or ip} export ALLUXIO_UNDERFS_ADDRESS=${底层存储系统地址 hdfs、S3等都可以} export ALLUXIO_WORKER_MEMORY_SIZE=XGB export ALLUXIO_RAM_FOLDER=${Alluxio worker保存in-memory数据的目录} export ALLUXIO_JAVA_OPTS&#43;=&rdquo; Java虚拟机配置选项&rdquo;
+alluxio-site.properties: alluxio.worker.tieredstore.reserver.enabled=true #是否启用层次化存储空间预留服务 alluxio.worker.tieredstore.levels=2 alluxio.worker.tieredstore.level0.alias=MEM alluxio.worker.tieredstore.level0.dirs.path=${Alluxio worker保存第一层级数据的目录} alluxio.worker.tieredstore.level0.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 在顶层存储层中的高水位比例，达到对应占用空间会进行数据淘汰 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 在顶层存储层中的低水位比例，数据淘汰后会降低到对应占用空间比例 alluxio.worker.tieredstore.level1.alias=HDD alluxio.worker.tieredstore.level1.dirs.path=${Alluxio worker保存第二层级数据的目录} alluxio.worker.tieredstore.level1.dirs.quota=XGB alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9 alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5 alluxio.security.authorization.permission.enabled=true 是否启用文件权限访问控制功能 alluxio.security.authentication.type=SIMPLE
+alluxio.security.authorization.permission.umask=027 创建文件和目录时的文件权限掩码 alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)
+master: ${master_hostname}
+worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
+若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS&#43;=“fs."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://neuwzm.github.io/" class="f3 fw2 hover-white no-underline white-90 dib">
+      My New Hugo Site
+    </a>
+    <div class="flex-l items-center">
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/about/" title="Abouts page">
+              Abouts
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white no-underline white-90" href="/posts/" title="Posts page">
+              Posts
+            </a>
+          </li>
+          
+        </ul>
+      
+      
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+    <main class="pb7" role="main">
+      
+  <div class="flex-l mt2 mw8 center">
+    <article class="center cf pv5 ph3 ph4-ns mw7">
+      <header>
+        <p class="f6 b helvetica tracked">
+          POSTS
+        </p>
+        <h1 class="f1">
+          Alluxio 部署说明文档
+        </h1>
+      </header>
+      <div class="nested-copy-line-height lh-copy f4 nested-links nested-img mid-gray">
+        <p>先简单介绍一下Alluxio：
+Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。
+目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。</p>
+
+<p><a href="https://www.alluxio.org/download">安装包下载</a>
+版本:1.5.0</p>
+
+<p>前期准备：
+master与worker机器间配互信（ssh免密登录）</p>
+
+<p>解压
+在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等</p>
+
+<p>最终我们需要配置好的文件及内容示例如下：</p>
+
+<p>alluxio-env.sh:
+export ALLUXIO_HOME=${Alluxio_install_path}
+export ALLUXIO_MASTER_HOSTNAME=${Alluxio master hostname or ip}
+export ALLUXIO_UNDERFS_ADDRESS=${底层存储系统地址 hdfs、S3等都可以}
+export ALLUXIO_WORKER_MEMORY_SIZE=XGB
+export ALLUXIO_RAM_FOLDER=${Alluxio worker保存in-memory数据的目录}
+export ALLUXIO_JAVA_OPTS+=&rdquo; Java虚拟机配置选项&rdquo;</p>
+
+<p>alluxio-site.properties:
+alluxio.worker.tieredstore.reserver.enabled=true  #是否启用层次化存储空间预留服务
+alluxio.worker.tieredstore.levels=2
+alluxio.worker.tieredstore.level0.alias=MEM
+alluxio.worker.tieredstore.level0.dirs.path=${Alluxio worker保存第一层级数据的目录}
+alluxio.worker.tieredstore.level0.dirs.quota=XGB
+alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9  在顶层存储层中的高水位比例，达到对应占用空间会进行数据淘汰
+alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5   在顶层存储层中的低水位比例，数据淘汰后会降低到对应占用空间比例
+alluxio.worker.tieredstore.level1.alias=HDD
+alluxio.worker.tieredstore.level1.dirs.path=${Alluxio worker保存第二层级数据的目录}
+alluxio.worker.tieredstore.level1.dirs.quota=XGB
+alluxio.worker.tieredstore.level0.watermark.high.ratio=0.9
+alluxio.worker.tieredstore.level0.watermark.low.ratio=0.5
+alluxio.security.authorization.permission.enabled=true    是否启用文件权限访问控制功能
+alluxio.security.authentication.type=SIMPLE<br />
+alluxio.security.authorization.permission.umask=027       创建文件和目录时的文件权限掩码
+alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)</p>
+
+<p>master:
+${master_hostname}</p>
+
+<p>worker:
+${worker_1_hostname}
+${worker_2_hostname}
+${worker_3_hostname}
+&hellip;</p>
+
+<p>若需要访问S3，则需要加入如下配置：
+alluxio-env.sh中加入：
+export ALLUXIO_JAVA_OPTS+=“fs.s3a.awsAccessKeyId=${AWS_ACCESS_KEY_ID} fs.s3a.awsSecretAccessKey=${AWS_SECRET_ACCESS_KEY}”
+其中s3a也可以替换成s3n，对应两个不同的S3 connector。但是如果使用的是中国区的aws s3 cn-north-1，建议使用s3a。因为alluxio使用的s3n只支持signature V2与aws进行鉴权，而aws cn-north-1中国新区只支持signature V4进行鉴权。我已经把这个解决方案提交给Alluxio开源社区并被采用。</p>
+
+<p>alluxio.underfs.s3.endpoint=s3.cn-north-1.amazonaws.com.cn
+alluxio.underfs.s3.endpoint.https.port=443</p>
+
+<p><a href="https://www.alluxio.org/docs/1.5/cn/Configuration-Settings.html">更多额外的细节配置请参考</a></p>
+
+<p>所有配置文件配置好后Alluxio提供了同步配置文件的接口，可以同步到所有worker的对应文件中：
+$ALLUXIO_HOME/bin/alluxio copyDir ${DirectoryName}</p>
+
+<p>如果机器上是第一次运行Alluxio或者Alluxio目录有变化时才需要执行
+./bin/alluxio format</p>
+
+<p>用户在linux系统下运行上述命令需要输入密码来获取sudo权限, 以便启动RAMFS。如果用户不想每次运行命令输入密码， 或者没有sudo权限，有如下解决办法：
+方法一：
+假设用户没有sudo权限，如果一个RAMFS（例如/path/to/ramdisk）已经被系统管理员挂载，Alluxio可以在此RAMFS下正常运行。你可以在conf/alluxio-site .properties文件中指定该路径：
+alluxio.worker.tieredstore.level0.alias=MEM
+alluxio.worker.tieredstore.level0.dirs.path=${/path/to/ramdisk}
+然后在不需要请求root权限的情况下启动Alluxio集群：
+$ALLUXIO_HOME/bin/alluxio.start.sh all NoMount</p>
+
+<p>方法二：
+另外，用户可以使用Linux tmpFS存储内存数据， Tmpfs是一个由内存支持的临时文件夹(常见的Linux下的 /dev/shm)，但会使用交换空间， 因此相比于使用RAMFS，Tmpfs提供的性能保证更少。和使用预先挂载的RAMFS类似，用户可以通过conf/alluxio-site.properties配置项配置Tmpfs文件夹
+alluxio.worker.tieredstore.level0.alias=MEM
+alluxio.worker.tieredstore.level0.dirs.path=/dev/shm
+然后在启动Alluxio集群：
+$ALLUXIO_HOME/bin/alluxio-start.sh local NoMount</p>
+
+<p>方法三：
+通过超级用户身份启动Alluxio或在suderors中增加启动Alluxio的用户。
+然后直接启动Alluxio集群：
+$ALLUXIO_HOME/bin/alluxio.start.sh all</p>
+
+<p>启动完后可以在${Alluxio_master_homename}:19999页面上看到整个Alluxio集群的各项信息。</p>
+
+      </div>
+    </article>
+    <aside class="ph3 mt2 mt6-ns">
+      
+
+
+
+
+
+
+
+  <div class="bg-light-gray pa3">
+    <ul>
+      <li class="list b mb3">
+        1 More Posts
+      </li>
+      
+        <li class="list f5 w-100 hover-bg-white nl1">
+          
+          <a href="/posts/alluxio-%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3/" class="link ph2 pv2 db black o-50">
+            Alluxio 部署说明文档
+          </a>
+        </li>
+      
+        <li class="list f5 w-100 hover-bg-white nl1">
+          
+          <a href="/posts/welcome/" class="link ph2 pv2 db black">
+            Welcome To Sledge&#39;s Home!
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+    </aside>
+  </div>
+
+    </main>
+    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://neuwzm.github.io/" >
+    &copy; 2017 My New Hugo Site
+  </a>
+  
+
+
+
+
+
+
+
+
+  </div>
+</footer>
+
+    <script src="https://neuwzm.github.io/dist/app.bundle.js" async></script>
+
+  </body>
+</html>
