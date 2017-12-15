@@ -39,7 +39,8 @@ worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &amp;hell
       <description>Name: Sledge
 Skill: Java Scala Spark
 Domain: Platform、RecommendSystem、Website
-Wechat: qazwsxwzm123</description>
+Wechat: qazwsxwzm123
+Github:neuwzm</description>
     </item>
     
     <item>
