@@ -23,7 +23,8 @@
     
 
     <meta property="og:title" content="Alluxio 部署说明文档" />
-<meta property="og:description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+<meta property="og:description" content="Alluxio部署说明文档，以版本1.5.0为例。
+先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
 安装包下载 版本:1.5.0
 前期准备： master与worker机器间配互信（ssh免密登录）
 解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
@@ -54,7 +55,8 @@ worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
 
 
 <meta itemprop="name" content="Alluxio 部署说明文档">
-<meta itemprop="description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+<meta itemprop="description" content="Alluxio部署说明文档，以版本1.5.0为例。
+先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
 安装包下载 版本:1.5.0
 前期准备： master与worker机器间配互信（ssh免密登录）
 解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
@@ -69,13 +71,14 @@ worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
 
 <meta itemprop="datePublished" content="2017-12-15T16:59:40&#43;08:00" />
 <meta itemprop="dateModified" content="2017-12-15T16:59:40&#43;08:00" />
-<meta itemprop="wordCount" content="119">
+<meta itemprop="wordCount" content="120">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Alluxio 部署说明文档"/>
-<meta name="twitter:description" content="先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+<meta name="twitter:description" content="Alluxio部署说明文档，以版本1.5.0为例。
+先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
 安装包下载 版本:1.5.0
 前期准备： master与worker机器间配互信（ssh免密登录）
 解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
@@ -148,7 +151,9 @@ worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
         </h1>
       </header>
       <div class="nested-copy-line-height lh-copy f4 nested-links nested-img mid-gray">
-        <p>先简单介绍一下Alluxio：
+        <p>Alluxio部署说明文档，以版本1.5.0为例。</p>
+
+<p>先简单介绍一下Alluxio：
 Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。
 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。</p>
 
