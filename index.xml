@@ -38,7 +38,7 @@ worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &amp;hell
       <guid>https://neuwzm.github.io/about/about/</guid>
       <description>Name: Sledge
 Skill: Java Scala Spark
-Domain: Platform、RecommendSystem、Website
+Domain: DataScience-Platform、RecommendSystem、Website
 Wechat: qazwsxwzm123
 Github:neuwzm</description>
     </item>
