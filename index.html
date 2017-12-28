@@ -146,7 +146,7 @@
             </a>
         </h1>
         <div class="f6 f5-l lh-copy nested-copy-line-height nested-links">
-          先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。 目前我参与的项目数据科学平台就是通过Alluxio集群挂载了Amazon S3云存储，将准备好开放给对应客户的数据推到与公司打通专线的S3上，通过Alluxio这个计算和存储的中间层实现数据权限的验证，针对于每个用户，只能读取操作有对应权限的数据。目前已支持数十个商业、学术合作和联合建模等项目。
+          先简单介绍一下Alluxio： Alluxio 是第一个访问速度在内存速度级的分布式存储系统，它统一了数据的获取途径， 是计算框架和底层存储模型的一座桥梁，而且 Alluxio 可以挂载多种底层存储系统，所以它可以作为统一层为任意数量的不同数据源提供服务。目前多家公司都有大规模部署Alluxio集群。
 安装包下载 版本:1.5.0
 前期准备： master与worker机器间配互信（ssh免密登录）
 解压 在conf目录下各个配置文件都有相应的模版，就像alluxio-env.sh.template、alluxio-site.properties.template等
@@ -156,7 +156,7 @@ alluxio-site.properties: alluxio.worker.tieredstore.reserver.enabled=true #是�
 alluxio.security.authorization.permission.umask=027 创建文件和目录时的文件权限掩码 alluxio.security.authorization.permission.supergroup=root Alluxio文件系统的超级用户组。所有该组下的用户拥有超级权限。(默认Allxuio获取用户对应组的关系是通过Linux系统的group，可以修改源代码满足具体需求)
 master: ${master_hostname}
 worker: ${worker_1_hostname} ${worker_2_hostname} ${worker_3_hostname} &hellip;
-若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS+=“fs.
+若需要访问S3，则需要加入如下配置： alluxio-env.sh中加入： export ALLUXIO_JAVA_OPTS+=“fs.s3a.awsAccessKeyId=${AWS_ACCESS_KEY_ID} fs.s3a.awsSecretAccessKey=${AWS_SECRET_ACCESS_KEY}” 其中s3a也可以替换成s3n，对应两个不同的S3 connector。但是如果使用的是中国区的aws s3 cn-north-1，建议使用s3a。因为alluxio使用的s3n只支持signature V2与aws进行鉴权，而aws cn-north-1中国新区只支持signature V4进行鉴权。我已经把这个解决方案提交给Alluxio开源社区并被采用。
         </div>
           <a href="/posts/alluxio-%E9%83%A8%E7%BD%B2%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3/" class="ba b--moon-gray bg-light-gray br2 color-inherit dib f7 hover-bg-moon-gray link mt2 ph2 pv1">read more</a>
         
